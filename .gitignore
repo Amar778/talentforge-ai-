@@ -1,17 +1,17 @@
 # Dependencies
-node_modules/
-.pnp
+/node_modules
+/.pnp
 .pnp.js
 .yarn/install-state.gz
 
 # Next.js Build Output
-.next/
-out/
-build/
-dist/
+/.next/
+/out/
+/build
+/dist
 
 # Testing & Coverage
-coverage/
+/coverage
 
 # Environment & Local Secrets
 .env
@@ -43,6 +43,5 @@ next-env.d.ts
 *.swo
 
 # Temporary Files
-tmp/
+/tmp
 *.tmp
-
