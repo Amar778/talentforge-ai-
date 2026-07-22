@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MockInterviewScenario, InterviewQuestion, InterviewFeedback } from '../app/types';
 import { interviewScenarios, sampleInterviewQuestions } from '../app/mockData';
 import { 
   Bot, Mic, Play, Pause, Send, Lightbulb, 
-  Award, CheckCircle, BarChart3, RefreshCw, Volume2, ShieldCheck, Sparkles 
+  Award, CheckCircle, BarChart3, RefreshCw, Volume2, ShieldCheck, Sparkles,
+  Monitor, MonitorOff, Video, Maximize2
 } from 'lucide-react';
 
 interface InterviewSimulatorProps {
-  onUseCredits: (amount: number) => void;
+  onUseCredits?: (amount: number) => void;
 }
 
 export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ onUseCredits }) => {
@@ -23,6 +24,17 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ onUseCre
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackScorecard, setFeedbackScorecard] = useState<InterviewFeedback | null>(null);
 
+  // Screen Share state
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [screenStream, setScreenStream] = useState<MediaStream | null>(null);
+  const screenVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (screenVideoRef.current && screenStream) {
+      screenVideoRef.current.srcObject = screenStream;
+    }
+  }, [screenStream, isScreenSharing]);
+
   const questions: InterviewQuestion[] = selectedScenario ? sampleInterviewQuestions[selectedScenario.id] || sampleInterviewQuestions["tech-lead-ai"] : [];
   const currentQuestion = questions[currentQuestionIdx];
 
@@ -32,7 +44,34 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ onUseCre
     setAnswersMap({});
     setUserAnswer('');
     setFeedbackScorecard(null);
-    onUseCredits(100);
+    if (onUseCredits) onUseCredits(0);
+  };
+
+  const handleToggleScreenShare = async () => {
+    if (isScreenSharing && screenStream) {
+      screenStream.getTracks().forEach((track) => track.stop());
+      setScreenStream(null);
+      setIsScreenSharing(false);
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: true,
+        });
+        setScreenStream(stream);
+        setIsScreenSharing(true);
+
+        const videoTrack = stream.getVideoTracks()[0];
+        if (videoTrack) {
+          videoTrack.onended = () => {
+            setIsScreenSharing(false);
+            setScreenStream(null);
+          };
+        }
+      } catch (err) {
+        console.log("Screen share cancelled or not permitted:", err);
+      }
+    }
   };
 
   const handleRecordToggle = () => {
@@ -137,7 +176,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ onUseCre
               className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-600/30 flex items-center space-x-2 transition-all disabled:opacity-50"
             >
               <Play className="w-5 h-5 fill-white" />
-              <span>Launch AI Interview Session (100 Credits)</span>
+              <span>Launch AI Interview Session</span>
             </button>
           </div>
         </div>
@@ -241,7 +280,7 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ onUseCre
             
             {/* AI Avatar Video / Audio Box */}
             <div className="glass-card p-6 rounded-2xl border border-purple-500/30 bg-gradient-to-b from-slate-900 via-purple-950/20 to-slate-950 space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center text-white ring-4 ring-purple-500/20">
                     <Bot className="w-6 h-6" />
@@ -255,10 +294,42 @@ export const InterviewSimulator: React.FC<InterviewSimulatorProps> = ({ onUseCre
                   </div>
                 </div>
 
-                <div className="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-white/10 text-xs text-purple-300 font-medium">
-                  Question {currentQuestionIdx + 1} of {questions.length}
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={handleToggleScreenShare}
+                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                      isScreenSharing
+                        ? 'bg-rose-600/30 text-rose-300 border-rose-500/50 shadow-lg shadow-rose-600/30 animate-pulse'
+                        : 'bg-indigo-950/40 text-indigo-300 border-indigo-500/30 hover:bg-indigo-900/60'
+                    }`}
+                  >
+                    {isScreenSharing ? <MonitorOff className="w-4 h-4 text-rose-400" /> : <Monitor className="w-4 h-4 text-indigo-400" />}
+                    <span>{isScreenSharing ? 'Stop Screen Share' : 'Share Screen'}</span>
+                  </button>
+
+                  <div className="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-white/10 text-xs text-purple-300 font-medium">
+                    Question {currentQuestionIdx + 1} of {questions.length}
+                  </div>
                 </div>
               </div>
+
+              {/* Screen Share Live Video Feed */}
+              {isScreenSharing && (
+                <div className="relative rounded-xl overflow-hidden border border-purple-500/40 bg-black shadow-2xl">
+                  <div className="absolute top-3 left-3 z-10 flex items-center space-x-2 bg-slate-950/80 backdrop-blur-md px-3 py-1 rounded-md border border-rose-500/40">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping inline-block" />
+                    <span className="text-[11px] font-bold text-rose-300 uppercase tracking-wider">LIVE SCREEN SHARE</span>
+                  </div>
+
+                  <video
+                    ref={screenVideoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full max-h-64 object-contain bg-slate-950"
+                  />
+                </div>
+              )}
 
               {/* Dynamic Question Display */}
               <div className="p-5 bg-purple-950/30 border border-purple-500/30 rounded-xl space-y-2">

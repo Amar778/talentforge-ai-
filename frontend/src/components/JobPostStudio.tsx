@@ -6,7 +6,7 @@ import { sampleJobPosts } from '../app/mockData';
 import { Briefcase, Wand2, ShieldCheck, DollarSign, Plus, CheckCircle2, Sparkles, RefreshCw, Calculator, TrendingUp } from 'lucide-react';
 
 interface JobPostStudioProps {
-  onUseCredits: (amount: number) => void;
+  onUseCredits?: (amount: number) => void;
 }
 
 export const JobPostStudio: React.FC<JobPostStudioProps> = ({ onUseCredits }) => {
@@ -55,7 +55,7 @@ export const JobPostStudio: React.FC<JobPostStudioProps> = ({ onUseCredits }) =>
   const handleAiGenerateJob = () => {
     if (!title.trim()) return;
     setIsGenerating(true);
-    onUseCredits(60);
+    if (onUseCredits) onUseCredits(0);
     setTimeout(() => {
       setIsGenerating(false);
       setBiasScore(97);
@@ -182,7 +182,7 @@ export const JobPostStudio: React.FC<JobPostStudioProps> = ({ onUseCredits }) =>
               ) : (
                 <>
                   <Wand2 className="w-4 h-4" />
-                  <span>Generate Job Description & Bias Audit (60 Credits)</span>
+                  <span>Generate Job Description & Bias Audit</span>
                 </>
               )}
             </button>

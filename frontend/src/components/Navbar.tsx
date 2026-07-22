@@ -7,7 +7,7 @@ import { Sparkles, Briefcase, User, Zap, Bell, Check, ShieldCheck } from 'lucide
 interface NavbarProps {
   currentRole: UserRole;
   onRoleChange: (role: UserRole) => void;
-  aiCredits: number;
+  aiCredits?: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentRole, onRoleChange, aiCredits }) => {
@@ -72,10 +72,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentRole, onRoleChange, aiCre
         {/* Right Utility Bar */}
         <div className="flex items-center space-x-3 sm:space-x-4">
           
-          {/* AI Credits Badge */}
-          <div className="hidden md:flex items-center space-x-2 bg-indigo-950/40 border border-indigo-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-300">
-            <Zap className="w-4 h-4 text-amber-400 fill-amber-400 animate-pulse" />
-            <span>{aiCredits.toLocaleString()} AI Credits</span>
+          {/* Unlimited Free AI Access Badge */}
+          <div className="hidden md:flex items-center space-x-2 bg-emerald-950/40 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-300">
+            <Sparkles className="w-4 h-4 text-emerald-400 fill-emerald-400 animate-pulse" />
+            <span>100% Free • Unlimited AI Access</span>
           </div>
 
           {/* Notifications Dropdown */}

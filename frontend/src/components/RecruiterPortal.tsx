@@ -7,7 +7,7 @@ import { RecruitmentAnalytics } from './RecruitmentAnalytics';
 import { Users, Briefcase, BarChart3 } from 'lucide-react';
 
 interface RecruiterPortalProps {
-  onUseCredits: (amount: number) => void;
+  onUseCredits?: (amount: number) => void;
 }
 
 export const RecruiterPortal: React.FC<RecruiterPortalProps> = ({ onUseCredits }) => {

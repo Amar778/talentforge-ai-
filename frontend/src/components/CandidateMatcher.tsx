@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 interface CandidateMatcherProps {
-  onUseCredits: (amount: number) => void;
+  onUseCredits?: (amount: number) => void;
 }
 
 export const CandidateMatcher: React.FC<CandidateMatcherProps> = ({ onUseCredits }) => {
@@ -33,7 +33,7 @@ export const CandidateMatcher: React.FC<CandidateMatcherProps> = ({ onUseCredits
 
   const handleRunAiBatchScreen = () => {
     setIsScreening(true);
-    onUseCredits(75);
+    if (onUseCredits) onUseCredits(0);
     setTimeout(() => {
       setIsScreening(false);
       setCandidates(candidates.map(c => {
@@ -101,7 +101,7 @@ export const CandidateMatcher: React.FC<CandidateMatcherProps> = ({ onUseCredits
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                <span>Run AI Batch Screener (75 Credits)</span>
+                <span>Run AI Batch Screener</span>
               </>
             )}
           </button>

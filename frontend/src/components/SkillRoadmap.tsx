@@ -6,7 +6,7 @@ import { initialSkillsList } from '../app/mockData';
 import { Compass, TrendingUp, BookOpen, Award, Sparkles, CheckCircle2, ArrowRight, Zap } from 'lucide-react';
 
 interface SkillRoadmapProps {
-  onUseCredits: (amount: number) => void;
+  onUseCredits?: (amount: number) => void;
 }
 
 export const SkillRoadmap: React.FC<SkillRoadmapProps> = ({ onUseCredits }) => {
@@ -51,7 +51,7 @@ export const SkillRoadmap: React.FC<SkillRoadmapProps> = ({ onUseCredits }) => {
 
   const handleGenerateCustomRoadmap = () => {
     setIsGeneratingPath(true);
-    onUseCredits(40);
+    if (onUseCredits) onUseCredits(0);
     setTimeout(() => {
       setIsGeneratingPath(false);
       setActiveTab('roadmap');
@@ -84,7 +84,7 @@ export const SkillRoadmap: React.FC<SkillRoadmapProps> = ({ onUseCredits }) => {
           ) : (
             <>
               <Sparkles className="w-4 h-4" />
-              <span>Generate AI Learning Roadmap (40 Credits)</span>
+              <span>Generate AI Learning Roadmap</span>
             </>
           )}
         </button>

@@ -10,7 +10,7 @@ import { FileText, Bot, Compass } from 'lucide-react';
 interface CandidatePortalProps {
   resume: ResumeData;
   onUpdateResume: (updated: ResumeData) => void;
-  onUseCredits: (amount: number) => void;
+  onUseCredits?: (amount: number) => void;
 }
 
 export const CandidatePortal: React.FC<CandidatePortalProps> = ({ resume, onUpdateResume, onUseCredits }) => {
