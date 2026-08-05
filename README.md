@@ -66,7 +66,7 @@ Ensure you have **Node.js** (v18 or higher) and **npm** installed on your machin
 - `npm run dev`: Starts the Next.js development server.
 - `npm run build`: Compiles and builds the production bundle.
 - `npm run start`: Starts the Next.js production server.
-- `npm run lint`: Runs ESLint for code analysis.
+- `npm run lint`: Runs ESLint for code analysis..
 
 ---
 
