@@ -2,7 +2,7 @@
 
 > **Next-Generation AI-Powered Recruitment & Career Development Platform**
 
-TalentForge AI is a modern web application designed to bridge the gap between job seekers and recruiters using artificial intelligence. It empowers candidates to build optimized resumes and practice interviews, while providing recruiters with intelligent candidate matching and automated job posting tools.
+TalentForge AI is a modern web application designed to bridge the gap between job seekers and recruiters using artificial intelligence. It empowers candidates to build optimized resumes and practice interviews, while providing recruiters with intelligent candidate matching and automated job posting tools...
 
 ---
 
